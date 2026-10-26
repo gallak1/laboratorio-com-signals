@@ -2,7 +2,7 @@
 
 Projeto de estudos desenvolvido com **Angular 18** para aprender e praticar o uso de **Signals** em aplicações reativas. A aplicação usa exemplos com elementos químicos para demonstrar como gerenciar estado, reagir a mudanças e compartilhar dados entre componentes.
 
-> **Tecnologias:** Angular 18, TypeScript, RxJS e Angular CLI. Este projeto não usa React nem Vite.
+> **Tecnologias:** Angular 18, TypeScript, Signals e Angular CLI.
 
 ## O que você vai encontrar
 
