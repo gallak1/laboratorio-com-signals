@@ -1,32 +1,65 @@
-# What are signals in Angular?
+# Lab Signals
 
-![image](https://github.com/user-attachments/assets/e25ef7e6-fb2a-4594-95fc-44ff21cdb17e)
+Projeto de estudos desenvolvido com **Angular 18** para aprender e praticar o uso de **Signals** em aplicações reativas. A aplicação usa exemplos com elementos químicos para demonstrar como gerenciar estado, reagir a mudanças e compartilhar dados entre componentes.
 
-**Signals** are a new feature introduced in Angular 16, designed to simplify how we handle state in components. Instead of relying on complex mechanisms like observables or heavy state managers, signals offer a more direct and efficient way to track changes and update the user interface.
+> **Tecnologias:** Angular 18, TypeScript, RxJS e Angular CLI. Este projeto não usa React nem Vite.
 
-A signal is essentially a "value holder," meaning it stores a piece of data and automatically notifies Angular when that data changes. This means that whenever the value of a signal is updated, the interface will reactively update, without needing any special handling on your part.
+## O que você vai encontrar
 
-## Practical Example: Creating and Updating a Signal
+- Uma lista de elementos químicos e seleção de um elemento.
+- Cálculo e exibição de informações derivadas dos elementos.
+- Alteração da temperatura para acompanhar o estado físico do elemento selecionado.
+- Gerenciamento de elementos favoritos.
+- Exemplos de estado compartilhado entre componentes por meio de um serviço.
 
-Let's create a signal called elementoSelecionado, which will store the selected chemical element by the user. Initially, it will be null since no element is selected. Later, when the user clicks on an item from the list, we update this signal.
+## O que é praticado
 
-```tsx
-elementoSelecionado = signal<Elemento | null>(null);
+- **Signals e estado reativo:** entender signals como valores acompanhados pelo Angular. Quando um signal muda, os consumidores que dependem dele podem ser atualizados automaticamente.
+- **Writable signals:** criar sinais graváveis para armazenar estados — como elemento selecionado, temperatura e favoritos — e atualizá-los com métodos como `set()` e `update()`.
+- **Computed signals:** derivar valores de outros sinais, como as informações do elemento selecionado e a soma das massas. O Angular recalcula esses valores quando suas dependências mudam.
+- **Exibição no HTML:** ler signals e valores computados nos templates para manter a interface sincronizada com o estado da aplicação.
+- **Effects:** executar ações em resposta a mudanças de signals. No exemplo de temperatura, um effect observa o elemento selecionado e a temperatura e atualiza o estado físico exibido.
+- **Escrita em effects:** conhecer a opção `{ allowSignalWrites: true }`, usada neste exemplo para permitir que o effect atualize um signal. Effects são indicados para efeitos colaterais; para valores derivados, `computed` costuma ser a opção adequada.
+- **Estado centralizado em serviços:** concentrar signals e operações relacionadas aos elementos em um serviço compartilhado. Isso evita duplicar lógica nos componentes e facilita a evolução da aplicação.
+- **Reatividade entre componentes:** compartilhar o serviço permite que diferentes componentes leiam e atualizem o mesmo estado, refletindo as mudanças na interface sem sincronização manual.
+- **Desempenho com `OnPush`:** combinar a estratégia de detecção de mudanças `OnPush` com signals para que componentes reajam às dependências usadas e evitem verificações desnecessárias.
+- **Funções e dependências de signals:** organizar atualizações e cálculos em funções específicas e observar somente os sinais realmente necessários.
+- **`untracked`:** ler valores dentro de um cálculo sem adicioná-los como dependências rastreadas, evitando recálculos causados por mudanças que não devem disparar aquele cálculo.
+
+Em conjunto, esses recursos ajudam a simplificar a lógica dos componentes e a construir interfaces dinâmicas, reativas e mais fáceis de escalar.
+
+## Pré-requisitos
+
+- Node.js e npm instalados.
+
+## Executar localmente
+
+Clone o repositório, entre na pasta do projeto e instale as dependências:
+
+```bash
+git clone https://github.com/gallak1/laboratorio-com-signals.git
+cd laboratorio-com-signals
+npm install
 ```
 
-Whenever the user selects an element, the .set() method is called, updating the state of elementoSelecionado. Here's how simple that is:
+Inicie o servidor de desenvolvimento:
 
-```tsx
-
-selecionarElemento(elemento: Elemento) {
-  this.elementoSelecionado.set(elemento);
-}
+```bash
+npm start
 ```
 
-Now, the magic happens: every time the state of elementoSelecionado changes, the interface that depends on that value will automatically update!
+Abra o endereço indicado pelo Angular CLI (normalmente `http://localhost:4200/`). O servidor recompila a aplicação quando os arquivos são alterados.
 
-https://github.com/user-attachments/assets/101f1546-3f9c-4d4b-9b94-3f9d4ec3a259
+## Gerar build de produção
 
-### Why Are Signals Awesome?
+```bash
+npm run build
+```
 
-Signals make life much simpler for Angular developers. If you're working on something where the state changes locally (e.g., selecting an item in a list, toggling a setting), signals are perfect. They are easy to create, update, and Angular does the heavy lifting of re-rendering everything for you. Plus, for those who have felt lost in the world of observables, signals provide a lighter, less complex alternative for handling state and reactivity.
+O Angular CLI gera os arquivos estáticos em `dist/lab-signals/`. Para publicar, envie o conteúdo dessa pasta para um serviço de hospedagem de sites estáticos. Se a aplicação for hospedada em um caminho diferente da raiz do domínio, configure o `base href` de acordo com esse caminho ao gerar o build, por exemplo:
+
+```bash
+npm run build -- --base-href /caminho-do-projeto/
+```
+
+Configure também a hospedagem para redirecionar rotas da aplicação para `index.html`, permitindo que a navegação do Angular funcione ao acessar ou atualizar diretamente uma rota.
